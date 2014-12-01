@@ -1,0 +1,306 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+# Made by Wout.Mertens@gmail.com
+# This grammar tries to be complete, but regex-based highlighters
+# can't be full parsers. Therefore it's a bit looser than the Nix
+# parser itself and some legal constructs will be marked as illegal.
+# It seems to work fine for nixpkgs.
+# Cute hacks: Check out the attrset-for-sure and friends definitions
+---
+name: Nix
+scopeName: source.nix
+fileTypes: [ "nix" ]
+uuid: 0514fd5f-acb6-436d-b42c-7643e6d36c8f
+
+patterns:
+- include: '#expression'
+
+repository:
+
+  expression:
+    patterns:
+    - include: '#whitespace'
+    - include: '#comment'
+    - include: '#parens'
+    - include: '#list'
+    - include: '#string'
+    - include: '#with-assert'
+    - include: '#function-for-sure'
+    - include: '#attrset-for-sure'
+    - include: '#attrset-or-function'
+    - include: '#let'
+    - include: '#if'
+    - include: '#interpolation'
+    - name: keyword.operator.nix
+      match: (\bor\b|\.|==|!=|!|\<\=|\<|\>\=|\>|&&|\|\||-\>|//|\?|\+\+|-|\*|/|\+)
+    - name: constant.language.nix
+      match: \b(builtins|true|false|null)\b
+    - name: support.function.nix
+      match: \b(scopedImport|import|isNull|abort|throw|baseNameOf|dirOf|removeAttrs|map|toString|derivationStrict|derivation)\b
+    - name: constant.numeric.nix
+      match: \b[0-9]+\b
+    - include: '#parameter-name'
+    - include: '#illegal'
+
+  parens:
+    begin: \(
+    end: \)
+    patterns:
+    - include: '#expression'
+
+  list:
+    begin: \[
+    end: \]
+    patterns:
+    - include: '#expression'
+
+  attrset-for-sure:
+    patterns:
+    - match: \{\s*\}
+      name: punctuation.definition.attrset.nix
+    - begin: \b(rec|let)\s*(\{)
+      beginCaptures:
+        '1': {name: keyword.other.nix}
+        '2': {name: punctuation.definition.attrset.nix}
+      end: \}
+      endCaptures: {'0': {name: punctuation.definition.attrset.nix}}
+      patterns:
+      - include: '#attrset-contents'
+    - begin: \{(?=[^,?]*=)
+      beginCaptures: {'0': {name: punctuation.definition.attrset.nix}}
+      end: \}
+      endCaptures: {'0': {name: punctuation.definition.attrset.nix}}
+      patterns:
+      - include: '#attrset-contents'
+
+  attrset-contents:
+    patterns:
+    - include: '#whitespace'
+    - include: '#comment'
+    - include: '#attribute-bind'
+    - include: '#illegal'
+
+  function-for-sure:
+    patterns:
+    # x: ...
+    - match: (\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*(:)
+      captures:
+        '1': {name: variable.parameter.nix}
+        '2': {name: punctuation.definition.entity.function.1.nix}
+    # {stuff}: ...
+    - begin: (\{)(?=[^}]*\}\s*:)
+      end: (\})\s*(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?(:)
+      beginCaptures:
+        '0': {name: punctuation.definition.entity.function.2.nix}
+      endCaptures:
+        '1': {name: punctuation.definition.entity.function.nix}
+        '2': {name: punctuation.definition.entity.function.nix}
+        '3': {name: variable.parameter.nix}
+        '5': {name: punctuation.definition.entity.function.nix}
+      patterns:
+      - include: '#function-contents'
+    # {a, b ? c, ...
+    - begin: (\{)(?=[^#}"'/=]*[,\?])
+      beginCaptures:
+        '0': {name: punctuation.definition.entity.function.3.nix}
+      end: (\}\s*(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?:)
+      endCaptures:
+        '1': {name: punctuation.definition.entity.function.nix}
+        '3': {name: variable.parameter.nix}
+        '5': {name: punctuation.definition.entity.function.nix}
+      patterns:
+      - include: '#function-contents'
+    # arg @ {...
+    - begin: ((\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*@\s*)(\{)
+      beginCaptures:
+        '3': {name: punctuation.definition.entity.function.4.nix}
+      end: (\}\s*(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?:)
+      endCaptures:
+        '0': {name: punctuation.definition.entity.function.nix}
+      patterns:
+      - include: '#function-contents'
+
+  function-contents:
+    patterns:
+    - include: '#whitespace'
+    - include: '#comment'
+    - include: '#function-parameter'
+    - include: '#illegal'    
+
+  attrset-or-function:
+    begin: (\{)
+    beginCaptures:
+      '0': {name: punctuation.definition.attrset-or-function.nix}
+    end: \}(\s*:)?
+    endCaptures:
+      '0': {name: punctuation.definition.attrset-or-function.nix}
+    patterns:
+    - include: '#whitespace'
+    - include: '#comment'
+    # We have no clue what to expect so we allow both
+    - match: \,
+    - include: '#optional-default'
+    - include: '#attribute-bind'
+    - include: '#function-parameter'
+    - include: '#illegal'    
+
+  with-assert:
+    begin: \b(with|assert)\b
+    beginCaptures:
+      '0': {name: keyword.other.nix}
+    end: \;
+    patterns:
+    - include: '#expression'
+
+  let:
+    begin: \blet\b
+    beginCaptures:
+      '0': {name: keyword.other.nix}
+    end: \bin\b
+    endCaptures:
+      '0': {name: keyword.other.nix}
+    patterns:
+    - include: '#whitespace'
+    - include: '#comment'
+    - include: '#attribute-bind'
+    - include: '#illegal'
+
+  if:
+    # Wish there was a way to enforce a single "then"
+    begin: \bif\b
+    beginCaptures:
+      '0': {name: keyword.other.nix}
+    end: \belse\b
+    endCaptures:
+      '0': {name: keyword.other.nix}
+    patterns:
+    - match: \bthen\b
+      name: keyword.other.nix
+    - include: '#expression'
+
+  comment:
+    patterns:
+    - name: comment.block.nix
+      begin: /\*([^*]|\*[^\/])*
+      end: \*\/
+    - name: comment.line.number-sign.nix
+      match: \#.*
+
+  interpolation:
+    contentName: string.interpolated.nix
+    begin: \$\{
+    beginCaptures:
+      "0":
+        name: constant.character.begin.nix
+    end: \}
+    endCaptures:
+      "0":
+        name: constant.character.end.nix
+    patterns:
+    - include: 'source.nix'
+
+  string-quoted:
+    name: string.quoted.double.nix
+    begin: \"
+    end: \"
+    patterns:
+    - match: \\.
+      name: constant.character.escape.nix
+    - include: '#interpolation'
+
+  string:
+    patterns:
+    - name: string.quoted.other.nix
+      begin: \'\'
+      end: \'\'(?!\$|\'|\\.)
+      patterns:
+      - name: constant.character.escape.nix
+        match: \'\'(\$|\'|\\.)
+      - include: '#interpolation'
+    - include: '#string-quoted'
+    - name: string.unquoted.path.nix
+      match: ([a-zA-Z0-9\.\_\-\+]*(\/[a-zA-Z0-9\.\_\-\+]+)+)
+    - name: string.unquoted.spath.nix
+      match: (\<[a-zA-Z0-9\.\_\-\+]+(\/[a-zA-Z0-9\.\_\-\+]+)*\>)
+    - name: string.unquoted.url.nix
+      match: ([a-zA-Z][a-zA-Z0-9\+\-\.]*\:[a-zA-Z0-9\%\/\?\:\@\&\=\+\$\,\-\_\.\!\~\*\']+)
+
+  parameter-name:
+    match: \b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*
+    name: variable.parameter.nix
+
+  attribute-name-single:
+    match: \b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*
+    name: entity.other.attribute-name.single.nix
+
+  attribute-name:
+    # Unfortunately, no pattern ordering can be enforced. Ah well.
+    patterns:
+    - match: \b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*
+      name: entity.other.attribute-name.multipart.nix
+    - match: \.
+    - include: '#string-quoted'
+    - include: '#interpolation'
+
+  # Need this split out for ordering
+  optional-default:
+    begin: \b([a-zA-Z\_][a-zA-Z0-9\_\'\-.]*)\s*(\?)
+    beginCaptures:
+      '1': {name: variable.parameter.nix}
+      '2': {name: keyword.operator.nix}
+    end: (,|(?=\}))
+    endCaptures:
+      '0': {name: punctuation.section.function.arguments.nix}
+    patterns:
+    - include: '#expression'
+  function-parameter:
+    patterns:
+    - match: (\.\.\.)
+      name: keyword.operator.nix
+    - include: '#optional-default'
+    - begin: \b([a-zA-Z\_][a-zA-Z0-9\_\'\-.]*)
+      end: (,|(?=\}))
+      beginCaptures:
+        '1': {name: variable.parameter.nix}
+        '2': {name: keyword.operator.nix}
+      patterns:
+      - include: '#whitespace'
+      - include: '#comment'
+
+  attribute-bind:
+    patterns:
+    - begin: \binherit\b
+      beginCaptures:
+        '0': {name: keyword.other.inherit.nix}
+      end: \;
+      endCaptures:
+        '0': {name: punctuation.terminator.inherit.nix}
+      patterns:
+      # This should only match once, in front. Ah well.
+      - begin: \(
+        end: \)
+        beginCaptures:
+          '0': {name: punctuation.section.function.arguments.nix}
+        endCaptures:
+          '0': {name: punctuation.section.function.arguments.nix}
+        patterns:
+        - include: '#expression'
+      - include: '#attribute-name-single'
+      - include: '#whitespace'
+      - include: '#illegal'
+    - include: '#attribute-name'
+    # Wish this could be forced after an attribute. Ah well.
+    - begin: \=
+      beginCaptures:
+        '0': {name: keyword.operator.bind.nix}
+      end: \;
+      endCaptures:
+        '0': {name: punctuation.terminator.bind.nix}
+      patterns:
+      - include: '#expression'
+
+  whitespace:
+    match: \s+
+
+  illegal:
+    match: .
+    name: invalid.illegal
