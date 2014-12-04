@@ -177,13 +177,22 @@ repository:
       name: keyword.other.nix
     - include: '#expression'
 
+  comment-remark:
+    match: (TODO|FIXME|BUG|\!\!\!):?
+    captures:
+      '1': {name: markup.bold.comment.nix }
   comment:
     patterns:
     - name: comment.block.nix
       begin: /\*([^*]|\*[^\/])*
       end: \*\/
+      patterns:
+      - include: '#comment-remark'
     - name: comment.line.number-sign.nix
-      match: \#.*
+      begin: \#
+      end: $
+      patterns:
+      - include: '#comment-remark'
 
   interpolation:
     contentName: string.interpolated.nix
