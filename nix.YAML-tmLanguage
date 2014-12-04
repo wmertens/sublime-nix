@@ -286,9 +286,10 @@ repository:
         - include: '#expression'
       - include: '#attribute-name-single'
       - include: '#whitespace'
+      - include: '#comment'
       - include: '#illegal'
     - include: '#attribute-name'
-    # Wish this could be forced after an attribute. Ah well.
+    # Wish this could match only after an attribute. Ah well.
     - begin: \=
       beginCaptures:
         '0': {name: keyword.operator.bind.nix}
