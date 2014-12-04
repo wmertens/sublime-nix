@@ -83,6 +83,10 @@
 						</dict>
 						<dict>
 							<key>include</key>
+							<string>#comment</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#illegal</string>
 						</dict>
 					</array>
@@ -315,14 +319,43 @@
 					<string>\*\/</string>
 					<key>name</key>
 					<string>comment.block.nix</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#comment-remark</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\#.*</string>
+					<key>begin</key>
+					<string>\#</string>
+					<key>end</key>
+					<string>$</string>
 					<key>name</key>
 					<string>comment.line.number-sign.nix</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#comment-remark</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
+		</dict>
+		<key>comment-remark</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>markup.bold.comment.nix</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(TODO|FIXME|BUG|\!\!\!):?</string>
 		</dict>
 		<key>expression</key>
 		<dict>
