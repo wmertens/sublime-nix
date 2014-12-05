@@ -147,8 +147,15 @@ repository:
     patterns:
     - include: '#whitespace'
     - include: '#comment'
-    # We have no clue what to expect so we allow both
-    - match: \,
+    # We have no clue what to expect so we allow both until we hit one
+    - begin: (?=\b(inherit\b|[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*=[^=]|\s+[a-zA-Z\_])))
+      end: (?=\})
+      patterns:
+      - include: '#attrset-contents'
+    - begin: (?=(,|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[,?]))
+      end: (?=\})
+      patterns:
+      - include: '#function-contents'
     - include: '#bad-reserved'
     - include: '#optional-default'
     - include: '#attribute-bind'
