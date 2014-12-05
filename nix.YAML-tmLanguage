@@ -1,10 +1,17 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 # Made by Wout.Mertens@gmail.com
+#
 # This grammar tries to be complete, but regex-based highlighters
 # can't be full parsers. Therefore it's a bit looser than the Nix
 # parser itself and some legal constructs will be marked as illegal.
 # It seems to work fine for nixpkgs.
+#
 # Cute hacks: Check out the attrset-for-sure and friends definitions
+#
+# While reading this, bear in mind that multi-line matches are not
+# allowed and the end regex is tested before enclosed patterns regexes
+# However, you can look-ahead to an end pattern with (?=...), which allows
+# you to match everything in a block
 ---
 name: Nix
 scopeName: source.nix
@@ -165,7 +172,6 @@ repository:
     - include: '#illegal'
 
   if:
-    # Wish there was a way to enforce a single "then"
     begin: \bif\b
     beginCaptures:
       '0': {name: keyword.other.nix}
@@ -173,8 +179,13 @@ repository:
     endCaptures:
       '0': {name: keyword.other.nix}
     patterns:
-    - match: \bthen\b
-      name: keyword.other.nix
+    # This can only match once
+    - begin: \bthen\b
+      beginCaptures:
+        '0': {name: keyword.other.nix}
+      end: (?=\belse\b)
+      patterns:
+      - include: '#expression'
     - include: '#expression'
 
   comment-remark:
