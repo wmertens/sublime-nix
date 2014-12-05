@@ -45,6 +45,7 @@ repository:
       match: \b(scopedImport|import|isNull|abort|throw|baseNameOf|dirOf|removeAttrs|map|toString|derivationStrict|derivation)\b
     - name: constant.numeric.nix
       match: \b[0-9]+\b
+    - include: '#bad-reserved'
     - include: '#parameter-name'
     - include: '#illegal'
 
@@ -83,6 +84,8 @@ repository:
     patterns:
     - include: '#whitespace'
     - include: '#comment'
+    - include: '#attribute-inherit'
+    - include: '#bad-reserved'
     - include: '#attribute-bind'
     - include: '#illegal'
 
@@ -130,8 +133,9 @@ repository:
     patterns:
     - include: '#whitespace'
     - include: '#comment'
+    - include: '#bad-reserved'
     - include: '#function-parameter'
-    - include: '#illegal'    
+    - include: '#illegal'
 
   attrset-or-function:
     begin: (\{)
@@ -145,6 +149,7 @@ repository:
     - include: '#comment'
     # We have no clue what to expect so we allow both
     - match: \,
+    - include: '#bad-reserved'
     - include: '#optional-default'
     - include: '#attribute-bind'
     - include: '#function-parameter'
@@ -168,6 +173,8 @@ repository:
     patterns:
     - include: '#whitespace'
     - include: '#comment'
+    - include: '#attribute-inherit'
+    - include: '#bad-reserved'
     - include: '#attribute-bind'
     - include: '#illegal'
 
@@ -286,28 +293,31 @@ repository:
       - include: '#whitespace'
       - include: '#comment'
 
+  attribute-inherit:
+    begin: \binherit\b
+    beginCaptures:
+      '0': {name: keyword.other.inherit.nix}
+    end: \;
+    endCaptures:
+      '0': {name: punctuation.terminator.inherit.nix}
+    patterns:
+    # This should only match once, in front. Ah well.
+    - begin: \(
+      end: \)
+      beginCaptures:
+        '0': {name: punctuation.section.function.arguments.nix}
+      endCaptures:
+        '0': {name: punctuation.section.function.arguments.nix}
+      patterns:
+      - include: '#expression'
+    - include: '#bad-reserved'
+    - include: '#attribute-name-single'
+    - include: '#whitespace'
+    - include: '#comment'
+    - include: '#illegal'
+
   attribute-bind:
     patterns:
-    - begin: \binherit\b
-      beginCaptures:
-        '0': {name: keyword.other.inherit.nix}
-      end: \;
-      endCaptures:
-        '0': {name: punctuation.terminator.inherit.nix}
-      patterns:
-      # This should only match once, in front. Ah well.
-      - begin: \(
-        end: \)
-        beginCaptures:
-          '0': {name: punctuation.section.function.arguments.nix}
-        endCaptures:
-          '0': {name: punctuation.section.function.arguments.nix}
-        patterns:
-        - include: '#expression'
-      - include: '#attribute-name-single'
-      - include: '#whitespace'
-      - include: '#comment'
-      - include: '#illegal'
     - include: '#attribute-name'
     # Wish this could match only after an attribute. Ah well.
     - begin: \=
@@ -325,3 +335,7 @@ repository:
   illegal:
     match: .
     name: invalid.illegal
+
+  bad-reserved:
+    match: \b(if|then|else|assert|with|let|in|rec|inherit|or)\b
+    name: invalid.illegal.reserved.nix
