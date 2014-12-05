@@ -73,7 +73,7 @@ repository:
       endCaptures: {'0': {name: punctuation.definition.attrset.nix}}
       patterns:
       - include: '#attrset-contents'
-    - begin: \{(?=[^,?]*=)
+    - begin: \{(?=[^,?]*(=|;))
       beginCaptures: {'0': {name: punctuation.definition.attrset.nix}}
       end: \}
       endCaptures: {'0': {name: punctuation.definition.attrset.nix}}
