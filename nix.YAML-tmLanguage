@@ -141,7 +141,7 @@ repository:
     begin: (\{)
     beginCaptures:
       '0': {name: punctuation.definition.attrset-or-function.nix}
-    end: \}(\s*:)?
+    end: \}(\s*(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?:)?
     endCaptures:
       '0': {name: punctuation.definition.attrset-or-function.nix}
     patterns:
