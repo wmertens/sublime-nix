@@ -6,12 +6,28 @@
 # parser itself and some legal constructs will be marked as illegal.
 # It seems to work fine for nixpkgs.
 #
-# Cute hacks: Check out the attrset-for-sure and friends definitions
 #
 # While reading this, bear in mind that multi-line matches are not
 # allowed and the end regex is tested before enclosed patterns regexes
 # However, you can look-ahead to an end pattern with (?=...), which allows
 # you to match everything in a block
+#
+#
+# To enforce multipart expressions, a wrapper pattern is used
+# that matches the beginning and end with look-ahead.
+# Then the parts are chained with look-aheads.
+#
+# Unfortunately this doesn't work if the end condition matches
+# the end of a part, in that case the part is fully matched
+# and legal expressions should still match properly.
+#
+#
+# There are no named regexes, so here's a list for copy-paste:
+# identifier: [a-zA-Z\_][a-zA-Z0-9\_\'\-]*
+# expression terminator next: (?=([\])};,]|\b(else|then)\b))
+# match anything coming next: (?=.?)
+# match until end of file: $^
+
 ---
 name: Nix
 scopeName: source.nix
@@ -186,18 +202,31 @@ repository:
     - include: '#illegal'
 
   if:
-    begin: \bif\b
-    beginCaptures:
-      '0': {name: keyword.other.nix}
-    end: \belse\b
-    endCaptures:
-      '0': {name: keyword.other.nix}
+    begin: (?=\bif\b)
+    end: (?=[\])};,])
     patterns:
-    # This can only match once
+    - begin: \bif\b
+      beginCaptures:
+        '0': {name: keyword.other.nix}
+      end: (?=\bthen\b)
+      endCaptures:
+        '0': {name: keyword.other.nix}
+      patterns:
+      - include: '#expression'
     - begin: \bthen\b
       beginCaptures:
         '0': {name: keyword.other.nix}
       end: (?=\belse\b)
+      endCaptures:
+        '0': {name: keyword.other.nix}
+      patterns:
+      - include: '#expression'
+    - begin: \belse\b
+      end: (?=[\])};,])
+      beginCaptures:
+        '0': {name: keyword.other.nix}
+      endCaptures:
+        '0': {name: keyword.other.nix}
       patterns:
       - include: '#expression'
     - include: '#expression'
