@@ -243,17 +243,13 @@ repository:
       - include: '#comment-remark'
 
   interpolation:
-    contentName: string.interpolated.nix
+    name: markup.italic
     begin: \$\{
-    beginCaptures:
-      "0":
-        name: constant.character.begin.nix
+    beginCaptures: {"0": {name: punctuation.section.embedded.begin.nix}}
     end: \}
-    endCaptures:
-      "0":
-        name: constant.character.end.nix
+    endCaptures: {"0": {name: punctuation.section.embedded.end.nix}}
     patterns:
-    - include: 'source.nix'
+    - include: '#expression'
 
   string-quoted:
     name: string.quoted.double.nix
