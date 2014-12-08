@@ -41,8 +41,6 @@ repository:
 
   expression:
     patterns:
-    - include: '#whitespace'
-    - include: '#comment'
     - include: '#parens'
     - include: '#list'
     - include: '#string'
@@ -63,7 +61,7 @@ repository:
       match: \b[0-9]+\b
     - include: '#bad-reserved'
     - include: '#parameter-name'
-    - include: '#illegal'
+    - include: '#others'
 
   parens:
     begin: \(
@@ -98,12 +96,10 @@ repository:
 
   attrset-contents:
     patterns:
-    - include: '#whitespace'
-    - include: '#comment'
     - include: '#attribute-inherit'
     - include: '#bad-reserved'
     - include: '#attribute-bind'
-    - include: '#illegal'
+    - include: '#others'
 
   function-for-sure:
     patterns:
@@ -147,11 +143,9 @@ repository:
 
   function-contents:
     patterns:
-    - include: '#whitespace'
-    - include: '#comment'
     - include: '#bad-reserved'
     - include: '#function-parameter'
-    - include: '#illegal'
+    - include: '#others'
 
   attrset-or-function:
     begin: (\{)
@@ -371,6 +365,12 @@ repository:
   illegal:
     match: .
     name: invalid.illegal
+
+  others:
+    patterns:
+    - include: '#whitespace'
+    - include: '#comment'
+    - include: '#illegal'
 
   bad-reserved:
     match: \b(if|then|else|assert|with|let|in|rec|inherit|or)\b
