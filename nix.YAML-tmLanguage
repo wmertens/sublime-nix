@@ -132,7 +132,7 @@ repository:
       contentName: meta.attrset.contents.nix
       patterns:
       - include: '#attrset-contents'
-    - begin: (^|(?<=\}))
+    - begin: (?<=\})
       end: (?=([\])};,]|\b(else|then)\b))
       patterns:
       - include: '#expression-cont'
