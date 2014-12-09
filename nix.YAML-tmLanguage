@@ -129,7 +129,6 @@ repository:
       end: (\})
       beginCaptures: {"0":{name: punctuation.definition.attrset.nix}}
       endCaptures: {"0":{name: punctuation.definition.attrset.nix}}
-      contentName: meta.attrset.contents.nix
       patterns:
       - include: '#attrset-contents'
     - begin: (?<=\})
@@ -188,14 +187,12 @@ repository:
   function-header-until-colon-no-arg:
     begin: (?=\{)
     end: (?=\:)
-    name: debug8
     patterns:
     - include: '#function-header-open-brace'
     - include: '#function-header-close-brace-no-arg'
   function-header-until-colon-with-arg:
     begin: (?=\{)
     end: (?=\:)
-    name: debug9
     patterns:
     - include: '#function-header-open-brace'
     - include: '#function-header-close-brace-with-arg'
@@ -209,24 +206,20 @@ repository:
   function-definition:
     begin: (?=.?)
     end: (?=([\])};,]|\b(else|then)\b))
-    name: debug
     patterns:
     - include: '#function-body-from-colon'
     # Chained expressions for [arg@]{a,b,c?xxx}[@arg]:yyy
     - begin: (?=.?)
       end: (?=\:)
-      name: debug2
       patterns:
       # arg @ { ...
       - begin: (\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*)
         end: (?=\:)
-        name: debug3
         beginCaptures:
           '0': {name: variable.parameter.function.4.nix}
         patterns:
         - begin: \@
           end: (?=\:)
-          name: debug4
           patterns:
           - include: '#function-header-until-colon-no-arg'
           - include: '#others'
@@ -234,24 +227,20 @@ repository:
       # { ...
       - begin: (?=\{)
         end: (?=\:)
-        name: debug65
         patterns:
         - include: '#function-header-until-colon-with-arg'
     - include: '#others'
   function-definition-brace-opened:
     begin: (?=.?)
     end: (?=([\])};,]|\b(else|then)\b))
-    name: debug
     patterns:
     - include: '#function-body-from-colon'
     # Chained expressions for a,b,c?xxx}[@arg]:yyy
     - begin: (?=.?)
       end: (?=\:)
-      name: debug2
       patterns:
       - begin: (?=.?)
         end: (?=\:)
-        name: debug5
         patterns:
         - include: '#function-header-close-brace-with-arg'
         - begin: (?=.?)
@@ -284,7 +273,6 @@ repository:
     # attrset contents => treat the rest as attrset
     - begin: (?=\b(inherit\b|[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])))
       end: (?=([\])};,]|\b(else|then)\b))
-      name: debug1
       patterns:
       - begin: (^|(?<=\}))
         end: (?=([\])};,]|\b(else|then)\b))
@@ -292,20 +280,17 @@ repository:
         - include: '#expression-cont'
       - begin: (?=.?)
         end: \}
-        name: debug17
         patterns:
         - include: '#attrset-contents'
     # function contents => treat the rest as function header
     - begin: (?=(\.\.\.|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[,?]|\}\s*:))
       end: (?=([\])};,]|\b(else|then)\b))
-      name: debug11
       patterns:
       - include: '#function-definition-brace-opened'
     # this line has no hints, eat the first word of the set
     - include: '#bad-reserved'
     - begin: \b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*
       end: (?=([\])};,]|\b(else|then)\b))
-      name: debug3
       patterns:
       - begin: (?=\.)
         end: (?=([\])};,]|\b(else|then)\b))
@@ -404,7 +389,6 @@ repository:
   function-body:
     begin: (@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?(\:)
     end: (?=([\])};,]|\b(else|then)\b))
-    contentName: meta.function.body.nix
     patterns:
     - include: '#expression'
 
