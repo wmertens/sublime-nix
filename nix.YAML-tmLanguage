@@ -422,6 +422,8 @@ repository:
     name: string.quoted.double.nix
     begin: \"
     end: \"
+    beginCaptures: {'0': {name: punctuation.definition.string.double.start.nix}}
+    endCaptures: {'0': {name: punctuation.definition.string.double.end.nix}}
     patterns:
     - match: \\.
       name: constant.character.escape.nix
@@ -435,6 +437,8 @@ repository:
       - name: string.quoted.other.nix
         begin: \'\'
         end: \'\'(?!\$|\'|\\.)
+        beginCaptures: {'0': {name: punctuation.definition.string.other.start.nix}}
+        endCaptures: {'0': {name: punctuation.definition.string.other.end.nix}}
         patterns:
         - name: constant.character.escape.nix
           match: \'\'(\$|\'|\\.)
