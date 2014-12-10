@@ -136,12 +136,16 @@ repository:
       patterns:
       - include: '#expression-cont'
   attrset-definition-brace-opened:
-    begin: (?=.?)
-    end: \}
-    endCaptures: {"0":{name: punctuation.definition.attrset.nix}}
-    contentName: meta.attrset.contents.nix
     patterns:
-    - include: '#attrset-contents'
+    - begin: (?<=\})
+      end: (?=([\])};,]|\b(else|then)\b))
+      patterns:
+      - include: '#expression-cont'
+    - begin: (?=.?)
+      end: \}
+      endCaptures: {"0":{name: punctuation.definition.attrset.nix}}
+      patterns:
+      - include: '#attrset-contents'
 
   attrset-contents:
     patterns:
@@ -239,14 +243,11 @@ repository:
     - begin: (?=.?)
       end: (?=\:)
       patterns:
+      - include: '#function-header-close-brace-with-arg'
       - begin: (?=.?)
-        end: (?=\:)
+        end: (?=\})
         patterns:
-        - include: '#function-header-close-brace-with-arg'
-        - begin: (?=.?)
-          end: (?=\})
-          patterns:
-          - include: '#function-contents'
+        - include: '#function-contents'
     - include: '#others'
 
   function-for-sure:
@@ -274,14 +275,7 @@ repository:
     - begin: (?=\b(inherit\b|[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])))
       end: (?=([\])};,]|\b(else|then)\b))
       patterns:
-      - begin: (^|(?<=\}))
-        end: (?=([\])};,]|\b(else|then)\b))
-        patterns:
-        - include: '#expression-cont'
-      - begin: (?=.?)
-        end: \}
-        patterns:
-        - include: '#attrset-contents'
+      - include: '#attrset-definition-brace-opened'
     # function contents => treat the rest as function header
     - begin: (?=(\.\.\.|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[,?]|\}\s*:))
       end: (?=([\])};,]|\b(else|then)\b))
