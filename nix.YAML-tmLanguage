@@ -47,8 +47,8 @@ repository:
 
   expression:
     patterns:
-    - include: '#parens'
-    - include: '#list'
+    - include: '#parens-and-cont'
+    - include: '#list-and-cont'
     - include: '#string'
     - include: '#interpolation'
     - include: '#with-assert'
@@ -60,7 +60,7 @@ repository:
     - include: '#operator-unary'
     - include: '#constants'
     - include: '#bad-reserved'
-    - include: '#parameter-name'
+    - include: '#parameter-name-and-cont'
     - include: '#others'
   expression-cont:
     begin: (?=.?)
@@ -81,31 +81,35 @@ repository:
     - include: '#others'
 
   parens:
+    begin: \(
+    beginCaptures:
+      '0': {name: punctuation.definition.expression.nix }
+    end: \)
+    endCaptures:
+      '0': {name: punctuation.definition.expression.nix }
+    patterns:
+    - include: '#expression'
+  parens-and-cont:
     begin: (?=\()
     end: (?=([\])};,]|\b(else|then)\b))
     patterns:
-    - begin: \(
-      beginCaptures:
-        '0': {name: punctuation.definition.expression.nix }
-      end: \)
-      endCaptures:
-        '0': {name: punctuation.definition.expression.nix }
-      patterns:
-      - include: '#expression'
+    - include: '#parens'
     - include: '#expression-cont'
 
   list:
+    begin: \[
+    beginCaptures:
+      '0': {name: punctuation.definition.list.nix }
+    end: \]
+    endCaptures:
+      '0': {name: punctuation.definition.list.nix }
+    patterns:
+    - include: '#expression'
+  list-and-cont:
     begin: (?=\[)
     end: (?=([\])};,]|\b(else|then)\b))
     patterns:
-    - begin: \[
-      beginCaptures:
-        '0': {name: punctuation.definition.list.nix }
-      end: \]
-      endCaptures:
-        '0': {name: punctuation.definition.list.nix }
-      patterns:
-      - include: '#expression'
+    - include: '#list'
     - include: '#expression-cont'
 
   attrset-for-sure:
@@ -462,6 +466,10 @@ repository:
       - include: '#expression-cont'
 
   parameter-name:
+    match: \b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*
+    captures: {"0":{name: variable.parameter.name.nix}}
+
+  parameter-name-and-cont:
     begin: \b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*
     end: (?=([\])};,]|\b(else|then)\b))
     beginCaptures: {"0":{name: variable.parameter.name.nix}}
