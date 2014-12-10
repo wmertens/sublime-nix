@@ -21,6 +21,12 @@
 # the end of a part, in that case the part is fully matched
 # and legal expressions should still match properly.
 #
+# Known issues:
+# - attrset:
+#   - if the closing brace of an empty { } block is at column 1
+#     of the line, it will terminate the expression and mark
+#     expression-cont rules as invalid
+#   - comma-first style of a function block will fail on column 1
 #
 # There are no named regexes, so here's a list for copy-paste:
 # identifier: [a-zA-Z\_][a-zA-Z0-9\_\'\-]*
@@ -272,12 +278,12 @@ repository:
     patterns:
     # We have no clue what to expect so we allow both until we hit one
     # attrset contents => treat the rest as attrset
-    - begin: (?=\b(inherit\b|[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])))
+    - begin: (?=(\s*\}|\"|\binherit\b|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])))
       end: (?=([\])};,]|\b(else|then)\b))
       patterns:
       - include: '#attrset-definition-brace-opened'
     # function contents => treat the rest as function header
-    - begin: (?=(\.\.\.|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[,?]|\}\s*:))
+    - begin: (?=(\.\.\.|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[,?]))
       end: (?=([\])};,]|\b(else|then)\b))
       patterns:
       - include: '#function-definition-brace-opened'
@@ -290,7 +296,7 @@ repository:
         end: (?=([\])};,]|\b(else|then)\b))
         patterns:
         - include: '#attrset-definition-brace-opened'
-      - begin: \,
+      - begin: \s*\,
         end: (?=([\])};,]|\b(else|then)\b))
         patterns:
         - include: '#function-definition-brace-opened'
