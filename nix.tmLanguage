@@ -22,31 +22,87 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>include</key>
+					<string>#attribute-name</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#attribute-bind-from-equals</string>
+				</dict>
+			</array>
+		</dict>
+		<key>attribute-bind-from-equals</key>
+		<dict>
+			<key>begin</key>
+			<string>\=</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.bind.nix</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.bind.nix</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#expression</string>
+				</dict>
+			</array>
+		</dict>
+		<key>attribute-inherit</key>
+		<dict>
+			<key>begin</key>
+			<string>\binherit\b</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.inherit.nix</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.inherit.nix</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
 					<key>begin</key>
-					<string>\binherit\b</string>
+					<string>\(</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.other.inherit.nix</string>
+							<string>punctuation.section.function.arguments.nix</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>\;</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.terminator.inherit.nix</string>
-						</dict>
-					</dict>
+					<string>(?=\;)</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>\(</string>
+							<string>\)</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>0</key>
@@ -56,22 +112,39 @@
 								</dict>
 							</dict>
 							<key>end</key>
-							<string>\)</string>
-							<key>endCaptures</key>
-							<dict>
-								<key>0</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.section.function.arguments.nix</string>
-								</dict>
-							</dict>
+							<string>(?=\;)</string>
 							<key>patterns</key>
 							<array>
 								<dict>
 									<key>include</key>
-									<string>#expression</string>
+									<string>#bad-reserved</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#attribute-name-single</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#others</string>
 								</dict>
 							</array>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#expression</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=[a-zA-Z\_])</string>
+					<key>end</key>
+					<string>(?=\;)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#bad-reserved</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -79,50 +152,13 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#whitespace</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comment</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#illegal</string>
+							<string>#others</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#attribute-name</string>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>\=</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.bind.nix</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>\;</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.terminator.bind.nix</string>
-						</dict>
-					</dict>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#expression</string>
-						</dict>
-					</array>
+					<string>#others</string>
 				</dict>
 			</array>
 		</dict>
@@ -163,11 +199,11 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#whitespace</string>
+					<string>#attribute-inherit</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#comment</string>
+					<string>#bad-reserved</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -175,7 +211,99 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#illegal</string>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>attrset-definition</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=\{)</string>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(\{)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.attrset.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\})</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.attrset.nix</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#attrset-contents</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=\})</string>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>attrset-definition-brace-opened</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=\})</string>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=.?)</string>
+					<key>end</key>
+					<string>\}</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.attrset.nix</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#attrset-contents</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
@@ -184,71 +312,57 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\{\s*\}</string>
-					<key>name</key>
-					<string>punctuation.definition.attrset.nix</string>
-				</dict>
-				<dict>
 					<key>begin</key>
-					<string>\b(rec|let)\s*(\{)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.other.nix</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.attrset.nix</string>
-						</dict>
-					</dict>
+					<string>(?=\brec\b)</string>
 					<key>end</key>
-					<string>\}</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.attrset.nix</string>
-						</dict>
-					</dict>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
+							<key>begin</key>
+							<string>\brec\b</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.other.nix</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=\{)</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#others</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
 							<key>include</key>
-							<string>#attrset-contents</string>
+							<string>#attrset-definition</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#others</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\{(?=[^,?]*=)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.attrset.nix</string>
-						</dict>
-					</dict>
+					<string>(?=\{\s*(\}|[^,?]*(=|;)))</string>
 					<key>end</key>
-					<string>\}</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.attrset.nix</string>
-						</dict>
-					</dict>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#attrset-contents</string>
+							<string>#attrset-definition</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#others</string>
 						</dict>
 					</array>
 				</dict>
@@ -257,7 +371,7 @@
 		<key>attrset-or-function</key>
 		<dict>
 			<key>begin</key>
-			<string>(\{)</string>
+			<string>\{</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -267,46 +381,157 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\}(\s*:)?</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.attrset-or-function.nix</string>
-				</dict>
-			</dict>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#whitespace</string>
+					<key>begin</key>
+					<string>(?=(\s*\}|\"|\binherit\b|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])))</string>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#attrset-definition-brace-opened</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=(\.\.\.|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[,?]))</string>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#function-definition-brace-opened</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#comment</string>
+					<string>#bad-reserved</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\,</string>
+					<key>begin</key>
+					<string>\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.function.maybe.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(?=\.)</string>
+							<key>end</key>
+							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#attrset-definition-brace-opened</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>\s*(\,)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.nix</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#function-definition-brace-opened</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=\=)</string>
+							<key>end</key>
+							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#attribute-bind-from-equals</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#attrset-definition-brace-opened</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=\?)</string>
+							<key>end</key>
+							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#function-parameter-default</string>
+								</dict>
+								<dict>
+									<key>begin</key>
+									<string>\,</string>
+									<key>beginCaptures</key>
+									<dict>
+										<key>0</key>
+										<dict>
+											<key>name</key>
+											<string>keyword.operator.nix</string>
+										</dict>
+									</dict>
+									<key>end</key>
+									<string>(?=([\])};,]|\b(else|then)\b))</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#function-definition-brace-opened</string>
+										</dict>
+									</array>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#others</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#optional-default</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#attribute-bind</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#function-parameter</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#illegal</string>
+					<string>#others</string>
 				</dict>
 			</array>
+		</dict>
+		<key>bad-reserved</key>
+		<dict>
+			<key>match</key>
+			<string>\b(if|then|else|assert|with|let|in|rec|inherit)\b</string>
+			<key>name</key>
+			<string>invalid.illegal.reserved.nix</string>
 		</dict>
 		<key>comment</key>
 		<dict>
@@ -357,29 +582,94 @@
 			<key>match</key>
 			<string>(TODO|FIXME|BUG|\!\!\!):?</string>
 		</dict>
+		<key>constants</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b(builtins|true|false|null)\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>constant.language.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b(scopedImport|import|isNull|abort|throw|baseNameOf|dirOf|removeAttrs|map|toString|derivationStrict|derivation)\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\b[0-9]+\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
 		<key>expression</key>
 		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#whitespace</string>
+					<string>#parens-and-cont</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#comment</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#parens</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#list</string>
+					<string>#list-and-cont</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#interpolation</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -407,31 +697,75 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#operator-unary</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#constants</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bad-reserved</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#parameter-name-and-cont</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>expression-cont</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=.?)</string>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#parens</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#list</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#interpolation</string>
 				</dict>
 				<dict>
+					<key>include</key>
+					<string>#function-for-sure</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#attrset-for-sure</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#attrset-or-function</string>
+				</dict>
+				<dict>
 					<key>match</key>
-					<string>(\bor\b|\.|==|!=|!|\&lt;\=|\&lt;|\&gt;\=|\&gt;|&amp;&amp;|\|\||-\&gt;|//|\?|\+\+|-|\*|/|\+)</string>
+					<string>(\bor\b|\.|==|!=|!|\&lt;\=|\&lt;|\&gt;\=|\&gt;|&amp;&amp;|\|\||-\&gt;|//|\?|\+\+|-|\*|/(?=([^*]|$))|\+)</string>
 					<key>name</key>
 					<string>keyword.operator.nix</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\b(builtins|true|false|null)\b</string>
-					<key>name</key>
-					<string>constant.language.nix</string>
+					<key>include</key>
+					<string>#constants</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\b(scopedImport|import|isNull|abort|throw|baseNameOf|dirOf|removeAttrs|map|toString|derivationStrict|derivation)\b</string>
-					<key>name</key>
-					<string>support.function.nix</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\b[0-9]+\b</string>
-					<key>name</key>
-					<string>constant.numeric.nix</string>
+					<key>include</key>
+					<string>#bad-reserved</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -439,7 +773,43 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#illegal</string>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-body</key>
+		<dict>
+			<key>begin</key>
+			<string>(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?(\:)</string>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#expression</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-body-from-colon</key>
+		<dict>
+			<key>begin</key>
+			<string>(\:)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.function.nix</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#expression</string>
 				</dict>
 			</array>
 		</dict>
@@ -449,11 +819,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#whitespace</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comment</string>
+					<string>#bad-reserved</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -461,7 +827,129 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#illegal</string>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-definition</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=.?)</string>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#function-body-from-colon</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=.?)</string>
+					<key>end</key>
+					<string>(?=\:)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>variable.parameter.function.4.nix</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>(?=\:)</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>begin</key>
+									<string>\@</string>
+									<key>end</key>
+									<string>(?=\:)</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#function-header-until-colon-no-arg</string>
+										</dict>
+										<dict>
+											<key>include</key>
+											<string>#others</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#others</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=\{)</string>
+							<key>end</key>
+							<string>(?=\:)</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#function-header-until-colon-with-arg</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-definition-brace-opened</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=.?)</string>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#function-body-from-colon</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=.?)</string>
+					<key>end</key>
+					<string>(?=\:)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#function-header-close-brace-with-arg</string>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?=.?)</string>
+							<key>end</key>
+							<string>(?=\})</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#function-contents</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#others</string>
 				</dict>
 			</array>
 		</dict>
@@ -470,133 +958,158 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.nix</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.1.nix</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*(:)</string>
-				</dict>
-				<dict>
 					<key>begin</key>
-					<string>(\{)(?=[^}]*\}\s*:)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.2.nix</string>
-						</dict>
-					</dict>
+					<string>(?=(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[:@]|\{[^}]*\}\s*:|\{[^#}"'/=]*[,\?]))</string>
 					<key>end</key>
-					<string>(\})\s*(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?(:)</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.nix</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.nix</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.nix</string>
-						</dict>
-						<key>5</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.nix</string>
-						</dict>
-					</dict>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#function-contents</string>
+							<string>#function-definition</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>function-header-close-brace-no-arg</key>
+		<dict>
+			<key>begin</key>
+			<string>\}</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.function.nix</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=\:)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-header-close-brace-with-arg</key>
+		<dict>
+			<key>begin</key>
+			<string>\}</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.function.nix</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=\:)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#function-header-terminal-arg</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-header-open-brace</key>
+		<dict>
+			<key>begin</key>
+			<string>\{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.function.2.nix</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=\})</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#function-contents</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-header-terminal-arg</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=@)</string>
+			<key>end</key>
+			<string>(?=\:)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\@</string>
+					<key>end</key>
+					<string>(?=\:)</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*)</string>
+							<key>end</key>
+							<string>(?=\:)</string>
+							<key>name</key>
+							<string>variable.parameter.function.3.nix</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#others</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>(\{)(?=[^#}"'/=]*[,\?])</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.3.nix</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(\}\s*(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?:)</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.nix</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.nix</string>
-						</dict>
-						<key>5</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.nix</string>
-						</dict>
-					</dict>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#function-contents</string>
-						</dict>
-					</array>
+					<key>include</key>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-header-until-colon-no-arg</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=\{)</string>
+			<key>end</key>
+			<string>(?=\:)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#function-header-open-brace</string>
 				</dict>
 				<dict>
-					<key>begin</key>
-					<string>((\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*@\s*)(\{)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.4.nix</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(\}\s*(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?:)</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.entity.function.nix</string>
-						</dict>
-					</dict>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#function-contents</string>
-						</dict>
-					</array>
+					<key>include</key>
+					<string>#function-header-close-brace-no-arg</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-header-until-colon-with-arg</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=\{)</string>
+			<key>end</key>
+			<string>(?=\:)</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#function-header-open-brace</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#function-header-close-brace-with-arg</string>
 				</dict>
 			</array>
 		</dict>
@@ -605,33 +1118,41 @@
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
+					<key>begin</key>
 					<string>(\.\.\.)</string>
+					<key>end</key>
+					<string>(,|(?=\}))</string>
 					<key>name</key>
 					<string>keyword.operator.nix</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#optional-default</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#others</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\b([a-zA-Z\_][a-zA-Z0-9\_\'\-.]*)</string>
+					<string>\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*</string>
 					<key>beginCaptures</key>
 					<dict>
-						<key>1</key>
+						<key>0</key>
 						<dict>
 							<key>name</key>
-							<string>variable.parameter.nix</string>
+							<string>variable.parameter.function.1.nix</string>
 						</dict>
-						<key>2</key>
+					</dict>
+					<key>end</key>
+					<string>(,|(?=\}))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
 						<dict>
 							<key>name</key>
 							<string>keyword.operator.nix</string>
 						</dict>
 					</dict>
-					<key>end</key>
-					<string>(,|(?=\}))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -642,43 +1163,138 @@
 							<key>include</key>
 							<string>#comment</string>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#function-parameter-default</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#expression</string>
+						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#others</string>
+				</dict>
+			</array>
+		</dict>
+		<key>function-parameter-default</key>
+		<dict>
+			<key>begin</key>
+			<string>\?</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.nix</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=[,}])</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#expression</string>
 				</dict>
 			</array>
 		</dict>
 		<key>if</key>
 		<dict>
 			<key>begin</key>
-			<string>\bif\b</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.nix</string>
-				</dict>
-			</dict>
+			<string>(?=\bif\b)</string>
 			<key>end</key>
-			<string>\belse\b</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.nix</string>
-				</dict>
-			</dict>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>match</key>
-					<string>\bthen\b</string>
-					<key>name</key>
-					<string>keyword.other.nix</string>
+					<key>begin</key>
+					<string>\bif\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\bth(?=en\b)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.nix</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#expression</string>
+					<key>begin</key>
+					<string>(?&lt;=th)en\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>\bel(?=se\b)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.nix</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=el)se\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.nix</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
@@ -698,11 +1314,9 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>constant.character.begin.nix</string>
+					<string>punctuation.section.embedded.begin.nix</string>
 				</dict>
 			</dict>
-			<key>contentName</key>
-			<string>string.interpolated.nix</string>
 			<key>end</key>
 			<string>\}</string>
 			<key>endCaptures</key>
@@ -710,39 +1324,171 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>constant.character.end.nix</string>
+					<string>punctuation.section.embedded.end.nix</string>
 				</dict>
 			</dict>
+			<key>name</key>
+			<string>markup.italic</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>source.nix</string>
+					<string>#expression</string>
 				</dict>
 			</array>
 		</dict>
 		<key>let</key>
 		<dict>
 			<key>begin</key>
-			<string>\blet\b</string>
+			<string>(?=\blet\b)</string>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\blet\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(in|else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(?=\{)</string>
+							<key>end</key>
+							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>begin</key>
+									<string>\{</string>
+									<key>end</key>
+									<string>\}</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#attrset-contents</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>begin</key>
+									<string>(^|(?&lt;=\}))</string>
+									<key>end</key>
+									<string>(?=([\])};,]|\b(else|then)\b))</string>
+									<key>patterns</key>
+									<array>
+										<dict>
+											<key>include</key>
+											<string>#expression-cont</string>
+										</dict>
+									</array>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#others</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#attrset-contents</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#others</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>\bin\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.other.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>list</key>
+		<dict>
+			<key>begin</key>
+			<string>\[</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.nix</string>
+					<string>punctuation.definition.list.nix</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>\bin\b</string>
+			<string>\]</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.nix</string>
+					<string>punctuation.definition.list.nix</string>
 				</dict>
 			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#expression</string>
+				</dict>
+			</array>
+		</dict>
+		<key>list-and-cont</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=\[)</string>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#list</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#expression-cont</string>
+				</dict>
+			</array>
+		</dict>
+		<key>operator-unary</key>
+		<dict>
+			<key>match</key>
+			<string>(!|-)</string>
+			<key>name</key>
+			<string>keyword.operator.unary.nix</string>
+		</dict>
+		<key>others</key>
+		<dict>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -755,81 +1501,90 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#attribute-bind</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#illegal</string>
-				</dict>
-			</array>
-		</dict>
-		<key>list</key>
-		<dict>
-			<key>begin</key>
-			<string>\[</string>
-			<key>end</key>
-			<string>\]</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#expression</string>
-				</dict>
-			</array>
-		</dict>
-		<key>optional-default</key>
-		<dict>
-			<key>begin</key>
-			<string>\b([a-zA-Z\_][a-zA-Z0-9\_\'\-.]*)\s*(\?)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>variable.parameter.nix</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.nix</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(,|(?=\}))</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.section.function.arguments.nix</string>
-				</dict>
-			</dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#expression</string>
 				</dict>
 			</array>
 		</dict>
 		<key>parameter-name</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.name.nix</string>
+				</dict>
+			</dict>
 			<key>match</key>
 			<string>\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*</string>
-			<key>name</key>
-			<string>variable.parameter.nix</string>
+		</dict>
+		<key>parameter-name-and-cont</key>
+		<dict>
+			<key>begin</key>
+			<string>\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.name.nix</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#expression-cont</string>
+				</dict>
+			</array>
 		</dict>
 		<key>parens</key>
 		<dict>
 			<key>begin</key>
 			<string>\(</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.expression.nix</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\)</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.expression.nix</string>
+				</dict>
+			</dict>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
 					<string>#expression</string>
+				</dict>
+			</array>
+		</dict>
+		<key>parens-and-cont</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=\()</string>
+			<key>end</key>
+			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#parens</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#expression-cont</string>
 				</dict>
 			</array>
 		</dict>
@@ -839,46 +1594,133 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\'\'</string>
+					<string>(?=\'\')</string>
 					<key>end</key>
-					<string>\'\'(?!\$|\'|\\.)</string>
-					<key>name</key>
-					<string>string.quoted.other.nix</string>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>match</key>
-							<string>\'\'(\$|\'|\\.)</string>
+							<key>begin</key>
+							<string>\'\'</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.other.start.nix</string>
+								</dict>
+							</dict>
+							<key>end</key>
+							<string>\'\'(?!\$|\'|\\.)</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>0</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.other.end.nix</string>
+								</dict>
+							</dict>
 							<key>name</key>
-							<string>constant.character.escape.nix</string>
+							<string>string.quoted.other.nix</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>match</key>
+									<string>\'\'(\$|\'|\\.)</string>
+									<key>name</key>
+									<string>constant.character.escape.nix</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#interpolation</string>
+								</dict>
+							</array>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#interpolation</string>
+							<string>#expression-cont</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#string-quoted</string>
+					<key>begin</key>
+					<string>(?=\")</string>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#string-quoted</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
-					<key>match</key>
+					<key>begin</key>
 					<string>([a-zA-Z0-9\.\_\-\+]*(\/[a-zA-Z0-9\.\_\-\+]+)+)</string>
-					<key>name</key>
-					<string>string.unquoted.path.nix</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.path.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
-					<key>match</key>
+					<key>begin</key>
 					<string>(\&lt;[a-zA-Z0-9\.\_\-\+]+(\/[a-zA-Z0-9\.\_\-\+]+)*\&gt;)</string>
-					<key>name</key>
-					<string>string.unquoted.spath.nix</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.spath.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
-					<key>match</key>
+					<key>begin</key>
 					<string>([a-zA-Z][a-zA-Z0-9\+\-\.]*\:[a-zA-Z0-9\%\/\?\:\@\&amp;\=\+\$\,\-\_\.\!\~\*\']+)</string>
-					<key>name</key>
-					<string>string.unquoted.url.nix</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>0</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.url.nix</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#expression-cont</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
@@ -886,8 +1728,24 @@
 		<dict>
 			<key>begin</key>
 			<string>\"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.double.start.nix</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.double.end.nix</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.double.nix</string>
 			<key>patterns</key>
