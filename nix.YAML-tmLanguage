@@ -510,26 +510,30 @@ repository:
 
   attribute-inherit:
     begin: \binherit\b
-    beginCaptures:
-      '0': {name: keyword.other.inherit.nix}
+    beginCaptures: {'0': {name: keyword.other.inherit.nix}}
     end: \;
-    endCaptures:
-      '0': {name: punctuation.terminator.inherit.nix}
+    endCaptures: {'0': {name: punctuation.terminator.inherit.nix}}
     patterns:
     # This should only match once, in front. Ah well.
     - begin: \(
-      end: \)
-      beginCaptures:
-        '0': {name: punctuation.section.function.arguments.nix}
-      endCaptures:
-        '0': {name: punctuation.section.function.arguments.nix}
+      end: (?=\;)
+      beginCaptures: {'0': {name: punctuation.section.function.arguments.nix}}
       patterns:
+      - begin: \)
+        end: (?=\;)
+        beginCaptures: {'0': {name: punctuation.section.function.arguments.nix}}
+        patterns:
+        - include: '#bad-reserved'
+        - include: '#attribute-name-single'
+        - include: '#others'
       - include: '#expression'
-    - include: '#bad-reserved'
-    - include: '#attribute-name-single'
-    - include: '#whitespace'
-    - include: '#comment'
-    - include: '#illegal'
+    - begin: (?=[a-zA-Z\_])
+      end: (?=\;)
+      patterns:
+      - include: '#bad-reserved'
+      - include: '#attribute-name-single'
+      - include: '#others'
+    - include: '#others'
 
   attribute-bind-from-equals:
     begin: \=
