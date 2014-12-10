@@ -359,30 +359,26 @@ repository:
 
   if:
     begin: (?=\bif\b)
-    end: (?=[\])};,])
+    end: (?=([\])};,]|\b(else|then)\b))
     patterns:
+    # We need to chop up else and then so the end condition
+    # doesn't occur prematurely
     - begin: \bif\b
-      beginCaptures:
-        '0': {name: keyword.other.nix}
-      end: (?=\bthen\b)
-      endCaptures:
-        '0': {name: keyword.other.nix}
+      end: \bth(?=en\b)
+      beginCaptures: {'0': {name: keyword.other.nix}}
+      endCaptures: {'0': {name: keyword.other.nix}}
       patterns:
       - include: '#expression'
-    - begin: \bthen\b
-      beginCaptures:
-        '0': {name: keyword.other.nix}
-      end: (?=\belse\b)
-      endCaptures:
-        '0': {name: keyword.other.nix}
+    - begin: (?<=th)en\b
+      end: \bel(?=se\b)
+      beginCaptures: {'0': {name: keyword.other.nix}}
+      endCaptures: {'0': {name: keyword.other.nix}}
       patterns:
       - include: '#expression'
-    - begin: \belse\b
-      end: (?=[\])};,])
-      beginCaptures:
-        '0': {name: keyword.other.nix}
-      endCaptures:
-        '0': {name: keyword.other.nix}
+    - begin: (?<=el)se\b
+      end: (?=([\])};,]|\b(else|then)\b))
+      endCaptures: {'0': {name: keyword.other.nix}}
+      beginCaptures: {'0': {name: keyword.other.nix}}
       patterns:
       - include: '#expression'
 
