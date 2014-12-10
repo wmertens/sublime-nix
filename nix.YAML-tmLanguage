@@ -295,12 +295,16 @@ repository:
     - include: '#bad-reserved'
     - begin: \b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*
       end: (?=([\])};,]|\b(else|then)\b))
+      # unmatched first word is likely a function call
+      beginCaptures: {'0': {name: variable.parameter.function.maybe.nix}}
       patterns:
       - begin: (?=\.)
         end: (?=([\])};,]|\b(else|then)\b))
         patterns:
         - include: '#attrset-definition-brace-opened'
-      - begin: \s*\,
+      # Note the \s*, this matches before the end-of-expr matches except at beginning
+      - begin: \s*(\,)
+        beginCaptures: {'1': {name: keyword.operator.nix}}
         end: (?=([\])};,]|\b(else|then)\b))
         patterns:
         - include: '#function-definition-brace-opened'
