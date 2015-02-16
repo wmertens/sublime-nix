@@ -19,6 +19,7 @@
 #
 # Unfortunately this doesn't work if the end condition matches
 # the end of a part, in that case the part is fully matched
+# instead of with a look-ahead
 # and legal expressions should still match properly.
 #
 # Known issues:
@@ -26,7 +27,6 @@
 #   - if the closing brace of an empty { } block is at column 1
 #     of the line, it will terminate the expression and mark
 #     expression-cont rules as invalid
-#   - comma-first style of a function block will fail on column 1
 #
 # There are no named regexes, so here's a list for copy-paste:
 # identifier: [a-zA-Z\_][a-zA-Z0-9\_\'\-]*
@@ -278,7 +278,8 @@ repository:
     begin: \{
     beginCaptures:
       '0': {name: punctuation.definition.attrset-or-function.nix}
-    end: (?=([\])};,]|\b(else|then)\b))
+    # Note the absence of a comma here, otherwise comma-first fails
+    end: (?=([\])};]|\b(else|then)\b))
     patterns:
     # We have no clue what to expect so we allow both until we hit one
     # attrset contents => treat the rest as attrset
@@ -294,7 +295,8 @@ repository:
     # this line has no hints, eat the first word of the set
     - include: '#bad-reserved'
     - begin: \b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*
-      end: (?=([\])};,]|\b(else|then)\b))
+      # Note the absence of a comma here, otherwise comma-first fails
+      end: (?=([\])};]|\b(else|then)\b))
       # unmatched first word is likely a function call
       beginCaptures: {'0': {name: variable.parameter.function.maybe.nix}}
       patterns:
