@@ -529,7 +529,7 @@
 		<key>bad-reserved</key>
 		<dict>
 			<key>match</key>
-			<string>\b(if|then|else|assert|with|let|in|rec|inherit)\b</string>
+			<string>(?![\w-'])(if|then|else|assert|with|let|in|rec|inherit)(?![\w-'])</string>
 			<key>name</key>
 			<string>invalid.illegal.reserved.nix</string>
 		</dict>
@@ -1770,7 +1770,7 @@
 		<key>with-assert</key>
 		<dict>
 			<key>begin</key>
-			<string>\b(with|assert)\b</string>
+			<string>(?![\w-'])(with|assert)(?![\w-'])</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
