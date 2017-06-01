@@ -329,7 +329,7 @@ repository:
     - include: '#others'
 
   with-assert:
-    begin: \b(with|assert)\b
+    begin: (?![\w-'])(with|assert)(?![\w-'])
     beginCaptures:
       '0': {name: keyword.other.nix}
     end: \;
@@ -602,5 +602,5 @@ repository:
 
   bad-reserved:
     # we don't mark "or" because it's a special case
-    match: \b(if|then|else|assert|with|let|in|rec|inherit)\b
+    match: (?![\w-'])(if|then|else|assert|with|let|in|rec|inherit)(?![\w-'])
     name: invalid.illegal.reserved.nix
