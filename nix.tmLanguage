@@ -1661,7 +1661,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>([a-zA-Z0-9\.\_\-\+]*(\/[a-zA-Z0-9\.\_\-\+]+)+)</string>
+					<string>(~?[a-zA-Z0-9\.\_\-\+]*(\/[a-zA-Z0-9\.\_\-\+]+)+)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
