@@ -386,7 +386,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\s*\}|\"|\binherit\b|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])))</string>
+					<string>(?=(\s*\}|\"|\binherit\b|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])|\$\{[a-zA-z0-9\_\'\-]+\})(\s*\.|\s*=[^=]))</string>
 					<key>end</key>
 					<string>(?=([\])};,]|\b(else|then)\b))</string>
 					<key>patterns</key>
