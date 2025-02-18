@@ -755,7 +755,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(\bor\b|\.|==|!=|!|\&lt;\=|\&lt;|\&gt;\=|\&gt;|&amp;&amp;|\|\||-\&gt;|//|\?|\+\+|-|\*|/(?=([^*]|$))|\+)</string>
+					<string>(\bor\b|\.|==|!=|!|\&lt;\=|\&lt;|\&gt;\=|\&gt;|&amp;&amp;|\|\||-\&gt;|//|\?|\+\+|\|>|-|\*|/(?=([^*]|$))|\+)</string>
 					<key>name</key>
 					<string>keyword.operator.nix</string>
 				</dict>
