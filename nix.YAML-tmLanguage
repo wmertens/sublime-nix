@@ -283,7 +283,7 @@ repository:
     patterns:
     # We have no clue what to expect so we allow both until we hit one
     # attrset contents => treat the rest as attrset
-    - begin: (?=(\s*\}|\"|\binherit\b|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])))
+    - begin: (?=(\s*\}|\"|\binherit\b|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])|\$\{[a-zA-z0-9\_\'\-]+\}(\s*\.|\s*=[^=])))
       end: (?=([\])};,]|\b(else|then)\b))
       patterns:
       - include: '#attrset-definition-brace-opened'
@@ -455,7 +455,7 @@ repository:
       patterns:
       - include: '#string-quoted'
       - include: '#expression-cont'
-    - begin: ([a-zA-Z0-9\.\_\-\+]*(\/[a-zA-Z0-9\.\_\-\+]+)+)
+    - begin: (~?[a-zA-Z0-9\.\_\-\+]*(\/[a-zA-Z0-9\.\_\-\+]+)+)
       beginCaptures: {"0": {name: string.unquoted.path.nix}}
       end: (?=([\])};,]|\b(else|then)\b))
       patterns:
