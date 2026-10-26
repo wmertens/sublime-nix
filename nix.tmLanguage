@@ -64,7 +64,7 @@
 		<key>attribute-inherit</key>
 		<dict>
 			<key>begin</key>
-			<string>\binherit\b</string>
+			<string>(?&lt;![\w'-])inherit(?![\w'-])</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>
@@ -220,7 +220,7 @@
 			<key>begin</key>
 			<string>(?=\{)</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -256,7 +256,7 @@
 					<key>begin</key>
 					<string>(?&lt;=\})</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -275,7 +275,7 @@
 					<key>begin</key>
 					<string>(?&lt;=\})</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -313,14 +313,14 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?=\brec\b)</string>
+					<string>(?=(?&lt;![\w'-])rec(?![\w'-]))</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>\brec\b</string>
+							<string>(?&lt;![\w'-])rec(?![\w'-])</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>0</key>
@@ -353,7 +353,7 @@
 					<key>begin</key>
 					<string>(?=\{\s*(\}|[^,?]*(=|;)))</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -381,14 +381,14 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=([\])};]|\b(else|then)\b))</string>
+			<string>(?=([\])};]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\s*\}|\"|\binherit\b|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])|\$\{[a-zA-z0-9\_\'\-]+\}(\s*\.|\s*=[^=])))</string>
+					<string>(?=(\s*\}|\"|(?&lt;![\w'-])inherit(?![\w'-])|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])|\$\{[a-zA-z0-9\_\'\-]+\}(\s*\.|\s*=[^=])))</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -401,7 +401,7 @@
 					<key>begin</key>
 					<string>(?=(\.\.\.|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[,?]))</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -426,14 +426,14 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};]|\b(else|then)\b))</string>
+					<string>(?=([\])};]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>begin</key>
 							<string>(?=\.)</string>
 							<key>end</key>
-							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -454,7 +454,7 @@
 								</dict>
 							</dict>
 							<key>end</key>
-							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -467,7 +467,7 @@
 							<key>begin</key>
 							<string>(?=\=)</string>
 							<key>end</key>
-							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -484,7 +484,7 @@
 							<key>begin</key>
 							<string>(?=\?)</string>
 							<key>end</key>
-							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -503,7 +503,7 @@
 										</dict>
 									</dict>
 									<key>end</key>
-									<string>(?=([\])};,]|\b(else|then)\b))</string>
+									<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 									<key>patterns</key>
 									<array>
 										<dict>
@@ -598,7 +598,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -619,7 +619,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -640,7 +640,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -722,7 +722,7 @@
 			<key>begin</key>
 			<string>(?=.?)</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -755,7 +755,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(\bor\b|\.|==|!=|!|\&lt;\=|\&lt;|\&gt;\=|\&gt;|&amp;&amp;|\|\||-\&gt;|//|\?|\+\+|\|&gt;|-|\*|/(?=([^*]|$))|\+)</string>
+					<string>((?&lt;![\w'-])or(?![\w'-])|\.|==|!=|!|\&lt;\=|\&lt;|\&gt;\=|\&gt;|&amp;&amp;|\|\||-\&gt;|//|\?|\+\+|\|&gt;|-|\*|/(?=([^*]|$))|\+)</string>
 					<key>name</key>
 					<string>keyword.operator.nix</string>
 				</dict>
@@ -782,7 +782,7 @@
 			<key>begin</key>
 			<string>(@\s*([a-zA-Z\_][a-zA-Z0-9\_\'\-]*)\s*)?(\:)</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -804,7 +804,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -836,7 +836,7 @@
 			<key>begin</key>
 			<string>(?=.?)</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -914,7 +914,7 @@
 			<key>begin</key>
 			<string>(?=.?)</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -961,7 +961,7 @@
 					<key>begin</key>
 					<string>(?=(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[:@]|\{[^}]*\}\s*:|\{[^#}"'/=]*[,\?]))</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1204,14 +1204,14 @@
 		<key>if</key>
 		<dict>
 			<key>begin</key>
-			<string>(?=\bif\b)</string>
+			<string>(?=(?&lt;![\w'-])if(?![\w'-]))</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\bif\b</string>
+					<string>(?&lt;![\w'-])if(?![\w'-])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1221,7 +1221,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>\bth(?=en\b)</string>
+					<string>(?&lt;![\w'-])th(?=en(?![\w'-]))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1240,7 +1240,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;=th)en\b</string>
+					<string>(?&lt;=th)en(?![\w'-])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1250,7 +1250,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>\bel(?=se\b)</string>
+					<string>(?&lt;![\w'-])el(?=se(?![\w'-]))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1269,7 +1269,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(?&lt;=el)se\b</string>
+					<string>(?&lt;=el)se(?![\w'-])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1279,7 +1279,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1340,14 +1340,14 @@
 		<key>let</key>
 		<dict>
 			<key>begin</key>
-			<string>(?=\blet\b)</string>
+			<string>(?=(?&lt;![\w'-])let(?![\w'-]))</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>\blet\b</string>
+					<string>(?&lt;![\w'-])let(?![\w'-])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1357,14 +1357,14 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(in|else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(in|else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>begin</key>
 							<string>(?=\{)</string>
 							<key>end</key>
-							<string>(?=([\])};,]|\b(else|then)\b))</string>
+							<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -1384,7 +1384,7 @@
 									<key>begin</key>
 									<string>(^|(?&lt;=\}))</string>
 									<key>end</key>
-									<string>(?=([\])};,]|\b(else|then)\b))</string>
+									<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 									<key>patterns</key>
 									<array>
 										<dict>
@@ -1411,7 +1411,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>\bin\b</string>
+					<string>(?&lt;![\w'-])in(?![\w'-])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>0</key>
@@ -1421,7 +1421,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1467,7 +1467,7 @@
 			<key>begin</key>
 			<string>(?=\[)</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1531,7 +1531,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1575,7 +1575,7 @@
 			<key>begin</key>
 			<string>(?=\()</string>
 			<key>end</key>
-			<string>(?=([\])};,]|\b(else|then)\b))</string>
+			<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1596,7 +1596,7 @@
 					<key>begin</key>
 					<string>(?=\'\')</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1646,7 +1646,7 @@
 					<key>begin</key>
 					<string>(?=\")</string>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1671,7 +1671,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1692,7 +1692,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1713,7 +1713,7 @@
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(?=([\])};,]|\b(else|then)\b))</string>
+					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
 						<dict>
