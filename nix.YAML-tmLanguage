@@ -455,10 +455,15 @@ repository:
       patterns:
       - include: '#string-quoted'
       - include: '#expression-cont'
-    - begin: (~?[a-zA-Z0-9\.\_\-\+]*(\/[a-zA-Z0-9\.\_\-\+]+)+)
-      beginCaptures: {"0": {name: string.unquoted.path.nix}}
+    # paths, which may contain ${} after their first /
+    - begin: (?=~?[a-zA-Z0-9\.\_\-\+]*\/([a-zA-Z0-9\.\_\-\+]|\$\{))
       end: (?=([\])};,]|(?<![\w'-])(else|then)(?![\w'-])))
       patterns:
+      - name: string.unquoted.path.nix
+        begin: ~?[a-zA-Z0-9\.\_\-\+]*\/
+        end: (?![a-zA-Z0-9\.\_\-\+\/]|\$\{)
+        patterns:
+        - include: '#interpolation'
       - include: '#expression-cont'
     - begin: (\<[a-zA-Z0-9\.\_\-\+]+(\/[a-zA-Z0-9\.\_\-\+]+)*\>)
       beginCaptures: {"0": {name: string.unquoted.spath.nix}}

@@ -1661,19 +1661,26 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(~?[a-zA-Z0-9\.\_\-\+]*(\/[a-zA-Z0-9\.\_\-\+]+)+)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.path.nix</string>
-						</dict>
-					</dict>
+					<string>(?=~?[a-zA-Z0-9\.\_\-\+]*\/([a-zA-Z0-9\.\_\-\+]|\$\{))</string>
 					<key>end</key>
 					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
 					<array>
+						<dict>
+							<key>begin</key>
+							<string>~?[a-zA-Z0-9\.\_\-\+]*\/</string>
+							<key>end</key>
+							<string>(?![a-zA-Z0-9\.\_\-\+\/]|\$\{)</string>
+							<key>name</key>
+							<string>string.unquoted.path.nix</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#interpolation</string>
+								</dict>
+							</array>
+						</dict>
 						<dict>
 							<key>include</key>
 							<string>#expression-cont</string>
