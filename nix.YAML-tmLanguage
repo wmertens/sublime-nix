@@ -405,7 +405,7 @@ repository:
   comment:
     patterns:
     - name: comment.block.nix
-      begin: /\*([^*]|\*[^\/])*
+      begin: /\*
       end: \*\/
       patterns:
       - include: '#comment-remark'

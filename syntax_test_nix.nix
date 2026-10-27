@@ -4,12 +4,16 @@
   # TODO: line comment
 # ^^^^^^^^^^^^^^^^^^^^ comment.line.number-sign.nix
 #   ^^^^ markup.bold.comment.nix
-  /* block comment */
-# ^^^^^^^^^^^^^^^^^^^ comment.block.nix
+  /* FIXME: block comment */
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^ comment.block.nix
+#    ^^^^^ markup.bold.comment.nix
   /*
-    FIXME: remarks are highlighted after the first line
-#   ^^^^^ markup.bold.comment.nix
+    BUG: multi-line block comment
+#   ^^^ markup.bold.comment.nix
   */
+  a = /* x **/ b;
+#     ^^^^^^^^ comment.block.nix
+#              ^ variable.parameter.name.nix
 
   # numbers and constants
   a = 42;
