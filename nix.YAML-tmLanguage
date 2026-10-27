@@ -74,7 +74,7 @@ repository:
     - include: '#attrset-for-sure'
     - include: '#attrset-or-function'
     - name: keyword.operator.nix
-      match: ((?<![\w'-])or(?![\w'-])|\.|==|!=|!|\<\=|\<|\>\=|\>|&&|\|\||-\>|//|\?|\+\+|\|>|-|\*|/(?=([^*]|$))|\+)
+      match: ((?<![\w'-])or(?![\w'-])|\.|==|!=|!|\<\||\<\=|\<|\>\=|\>|&&|\|\||-\>|//|\?|\+\+|\|>|-|\*|/(?=([^*]|$))|\+)
     - include: '#constants'
     - include: '#bad-reserved'
     - include: '#parameter-name'
@@ -263,7 +263,7 @@ repository:
   function-for-sure:
     patterns:
     # x: ... | {stuff}: ... | {a, b ? c, ... | arg @ {...
-    - begin: (?=(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[:@]|\{[^}]*\}\s*:|\{[^#}"'/=]*[,\?]))
+    - begin: (?=(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[:@]|\{[^}]*\}\s*[:@]|\{[^#}"'/=]*[,\?]))
       end: (?=([\])};,]|(?<![\w'-])(else|then)(?![\w'-])))
       patterns:
       - include: '#function-definition'
@@ -283,7 +283,7 @@ repository:
     patterns:
     # We have no clue what to expect so we allow both until we hit one
     # attrset contents => treat the rest as attrset
-    - begin: (?=(\s*\}|\"|(?<![\w'-])inherit(?![\w'-])|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])|\$\{[a-zA-z0-9\_\'\-]+\}(\s*\.|\s*=[^=])))
+    - begin: (?=(\s*\}|\"|(?<![\w'-])inherit(?![\w'-])|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])|\$\{[a-zA-Z0-9\_\'\-]+\}(\s*\.|\s*=[^=])))
       end: (?=([\])};,]|(?<![\w'-])(else|then)(?![\w'-])))
       patterns:
       - include: '#attrset-definition-brace-opened'

@@ -386,7 +386,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\s*\}|\"|(?&lt;![\w'-])inherit(?![\w'-])|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])|\$\{[a-zA-z0-9\_\'\-]+\}(\s*\.|\s*=[^=])))</string>
+					<string>(?=(\s*\}|\"|(?&lt;![\w'-])inherit(?![\w'-])|\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*(\s*\.|\s*=[^=])|\$\{[a-zA-Z0-9\_\'\-]+\}(\s*\.|\s*=[^=])))</string>
 					<key>end</key>
 					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
@@ -755,7 +755,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>((?&lt;![\w'-])or(?![\w'-])|\.|==|!=|!|\&lt;\=|\&lt;|\&gt;\=|\&gt;|&amp;&amp;|\|\||-\&gt;|//|\?|\+\+|\|&gt;|-|\*|/(?=([^*]|$))|\+)</string>
+					<string>((?&lt;![\w'-])or(?![\w'-])|\.|==|!=|!|\&lt;\||\&lt;\=|\&lt;|\&gt;\=|\&gt;|&amp;&amp;|\|\||-\&gt;|//|\?|\+\+|\|&gt;|-|\*|/(?=([^*]|$))|\+)</string>
 					<key>name</key>
 					<string>keyword.operator.nix</string>
 				</dict>
@@ -959,7 +959,7 @@
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(?=(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[:@]|\{[^}]*\}\s*:|\{[^#}"'/=]*[,\?]))</string>
+					<string>(?=(\b[a-zA-Z\_][a-zA-Z0-9\_\'\-]*\s*[:@]|\{[^}]*\}\s*[:@]|\{[^#}"'/=]*[,\?]))</string>
 					<key>end</key>
 					<string>(?=([\])};,]|(?&lt;![\w'-])(else|then)(?![\w'-])))</string>
 					<key>patterns</key>
